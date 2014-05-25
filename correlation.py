@@ -23,8 +23,6 @@
 from netCDF4 import Dataset
 import sys
 import numpy
-import zoo
-import urllib
 
 # Handles units such as months and years, which num2date does not do.
 def parseTime(timeVar):
@@ -143,27 +141,21 @@ def correlation(dataset1D, dataset3D, output):
 
     if len(vars1D) != 1:
         error("Too many variables in 1D dataset.")
-        return zoo.SERVICE_FAILED
 
     if len(vars3D) != 1:
         error("Too many variables in 3D dataset.")
-        return zoo.SERVICE_FAILED
 
     if 'time' not in dataset1D.dimensions:
         error("No time dimension in 1D dataset.")
-        return zoo.SERVICE_FAILED
 
     if 'time' not in dataset3D.dimensions:
         error("No time dimension in 3D dataset.")
-        return zoo.SERVICE_FAILED
 
     if 'lat' not in dataset3D.dimensions:
         error("No latitude dimension in 3D dataset.")
-        return zoo.SERVICE_FAILED
 
     if 'lon' not in dataset3D.dimensions:
         error("No longtitude dimension in 3D dataset.")
-        return zoo.SERVICE_FAILED
 
     time1D = parseTime(dataset1D.variables["time"])
     time3D = parseTime(dataset3D.variables["time"])
@@ -187,7 +179,7 @@ def correlation(dataset1D, dataset3D, output):
                                   numpy.take(vals, nones))
             outputVar[lat, lon] = val
 
-    return zoo.SERVICE_SUCCEEDED
+    return 1
 
 # Writes an error message to stderr.
 def error(message):
@@ -195,34 +187,6 @@ def error(message):
     sys.stderr.write(": ")
     sys.stderr.write(message)
     sys.stderr.write("\n")
+    raise Exception("Correlation error: " + message)
 
-
-def Correlate(conf,inputs,outputs):
-    try:
-	    output = Dataset('sample.nc', 'w', format='NETCDF4')
-    except:
-	    conf["lenv"]["message"] = "Could not open '" + "sample.nc" + "' for writing."
-	    return zoo.SERVICE_FAILED
-    try:
-	    #dataset1D = Dataset(inputs["url1"]["value"], 'r', format='NETCDF4')
-	    urllib.urlretrieve(inputs["url1"]["value"],"url1.nc")
-	    dataset1D = Dataset("url1.nc", 'r', format='NETCDF4')
-    except:
-	    conf["lenv"]["message"] = "Could not open '" + inputs["url1"]["value"] + "' for reading."
-	    return zoo.SERVICE_FAILED
-    try:
-	    #dataset3D = Dataset(inputs["url2"]["value"], 'r', format='NETCDF4')
-	    urllib.urlretrieve(inputs["url2"]["value"],"url2.nc")
-	    dataset3D = Dataset("url2.nc", 'r', format='NETCDF4')
-    except:
-	    conf["lenv"]["message"] = "Could not open '" + inputs["url2"]["value"] + "' for reading."
-	    return zoo.SERVICE_FAILED
-
-    result = correlation(dataset1D, dataset3D, output)
-    dataset1D.close()
-    dataset3D.close()
-    output.close()
-    outputs["Result"]["value"]="http://130.56.248.143/operators/sample.nc"
-    
-    return result
 
