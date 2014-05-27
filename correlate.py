@@ -189,4 +189,33 @@ def error(message):
     sys.stderr.write("\n")
     raise Exception("Correlation error: " + message)
 
+def main():
 
+    if len(sys.argv) != 4:
+        error("Operation requires 3 arguments.")
+        return 1
+    try:
+        dataset1D = Dataset(sys.argv[1], 'r', format='NETCDF4')
+    except:
+        error("Could not open '" + sys.argv[1] + "' for reading.")
+        return 1
+    try:
+        dataset3D = Dataset(sys.argv[2], 'r', format='NETCDF4')
+    except:
+        error("Could not open '" + sys.argv[2] + "' for reading.")
+        return 1
+    try:
+        output = Dataset(sys.argv[3], 'w', format='NETCDF4')
+    except:
+        error("Could not open '" + sys.argv[3] + "' for writing.")
+        return 1
+
+    result = correlate(dataset1D, dataset3D, output)
+    dataset1D.close()
+    dataset3D.close()
+    output.close()
+    return result
+
+if __name__ == '__main__':
+    exitCode = main()
+    exit(exitCode)
