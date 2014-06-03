@@ -1,5 +1,5 @@
 #
-# One-dimensional netCDF sample file generator
+# Analyses climate data for the purpose of correlation
 # Author:		Andrew Dunn
 # Last modified: 13 May 2014
 #
