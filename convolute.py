@@ -135,7 +135,7 @@ def prepareOutput(output, dataset1D, dataset3D):
     return values
 
 
-def correlation(dataset1D, dataset3D, output):
+def convolute(dataset1D, dataset3D, output):
     vars1D = set(dataset1D.variables.keys()) - set(dataset1D.dimensions.keys())
     vars3D = set(dataset3D.variables.keys()) - set(dataset3D.dimensions.keys())
     
@@ -188,7 +188,7 @@ def error(message):
     raise Exception("Correlation error: " + message)
 
 
-def runCorrelate(dataset1,dataset2,outputFile):
+def runConvolute(dataset1,dataset2,outputFile):
     try:
 	dataset1D = Dataset(dataset1, 'r', format='NETCDF4')
     except:
@@ -204,7 +204,7 @@ def runCorrelate(dataset1,dataset2,outputFile):
     except:
 	error("Could not open '" + outputFile + "' for writing.")
 	return 1
-    result = correlation(dataset1D, dataset3D, output)
+    result = convolute(dataset1D, dataset3D, output)
     dataset1D.close()
     dataset3D.close()
     output.close()
@@ -214,7 +214,7 @@ def main():
     if len(sys.argv) != 4:
 	error("Operation requires 3 arguments.")
 	return 1 
-    return runCorrelate(sys.argv[1],sys.argv[2],sys.argv[3])
+    return runConvolute(sys.argv[1],sys.argv[2],sys.argv[3])
 
 if __name__ == '__main__':
     exitCode = main()
