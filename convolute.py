@@ -174,7 +174,7 @@ def correlation(dataset1D, dataset3D, output):
 
             nones = [i for i, x in enumerate(numpy.ma.getmaskarray(vals)) if x == False]
 
-            val = numpy.corrcoef(numpy.take(index, nones),
+            val = numpy.correlate(numpy.take(index, nones),
                                   numpy.take(vals, nones))
             outputVar[lat, lon] = val
     return 1
