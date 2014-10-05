@@ -32,9 +32,9 @@ def error(message):
     raise Exception("Regresion error: " + message)
 
 
-def runRegres(dataset,outputFile):
+def runRegres(inputFiles,outputFiles):
     cdo = Cdo()
-    cdo.regres(input = dataset, output = outputFile)
+    cdo.regres(input = inputFiles[0], output = outputFiles[0])
     result = 1
 
 def main():

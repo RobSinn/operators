@@ -188,22 +188,22 @@ def error(message):
     raise Exception("Correlation error: " + message)
 
 
-def run(dataset1,dataset2,outputFile):
+def run(inputFiles,outputFiles):
     try:
-	dataset1D = Dataset(dataset1, 'r', format='NETCDF4')
+        dataset1D = Dataset(inputFiles[0], 'r', format='NETCDF4')
     except:
-	error("Could not open '" + dataset1 + "' for reading.")
-	return 1
+        error("Could not open '" + inputFiles[0] + "' for reading.")
+        return 1
     try:
-	dataset3D = Dataset(dataset2, 'r', format='NETCDF4')
+        dataset3D = Dataset(inputFiles[1], 'r', format='NETCDF4')
     except:
-	error("Could not open '" + dataset2 + "' for reading.")
-	return 1
+        error("Could not open '" + inputFiles[1] + "' for reading.")
+        return 1
     try:
-	output = Dataset(outputFile, 'w', format='NETCDF4')
+        output = Dataset(outputFiles[0], 'w', format='NETCDF4')
     except:
-	error("Could not open '" + outputFile + "' for writing.")
-	return 1
+        error("Could not open '" + outputFiles[0] + "' for writing.")
+        return 1
     result = convolute(dataset1D, dataset3D, output)
     dataset1D.close()
     dataset3D.close()
