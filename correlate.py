@@ -122,7 +122,7 @@ def prepareOutput(output, dataset1D, dataset3D):
     longitudes.long_name = 'Longitude'
     longitudes[:] = og_lons[:]
 
-    values = output.createVariable('correlation', 'f8', ('lat', 'lon', ))
+    values = output.createVariable('correlate', 'f8', ('lat', 'lon', ))
     values.units = 'unitless'
 
     varA = (set(dataset1D.variables.keys())
