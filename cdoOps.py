@@ -23,7 +23,7 @@
 import sys
 from cdo import *
 
-def checkOpp(option,operation,inputFiles,outputFiles,incount,outcount):
+def checkOp(option,operation,inputFiles,outputFiles,incount,outcount):
 	if option == operation:
 		if len(inputFiles) != incount and incount != -1:
 			raise Exception("Insufficent input files")
@@ -36,19 +36,19 @@ def checkOpp(option,operation,inputFiles,outputFiles,incount,outcount):
 def cdoCallString(files):
 	return ' '.join(map(str, files))
 
-def cdoOpps(opp,inputFiles,outputFiles):
+def cdoOps(op,inputFiles,outputFiles):
     	cdo = Cdo()
-	if checkOpp('regres',opp,inputFiles,outputFiles,1,1):
+	if checkOp('regress',op,inputFiles,outputFiles,1,1):
 		func = cdo.regres
-	elif checkOpp('trend',opp,inputFiles,outputFiles,1,2):
+	elif checkOpp('trend',op,inputFiles,outputFiles,1,2):
 		func = cdo.trend
 	else:
-		func = getattr(cdo, opp) #Can't check validity but allows any cdo op
+		func = getattr(cdo, op) #Can't check validity but allows any cdo op
 
 	return func
 
 
 if __name__ == '__main__':
-	func = cdoOpps(sys.argv[1],sys.argv[2].split(','),sys.argv[3].split(','))
+	func = cdoOps(sys.argv[1],sys.argv[2].split(','),sys.argv[3].split(','))
 	func(input = cdoCallString(sys.argv[2].split(',')), output = cdoCallString(sys.argv[3].split(',')))	
 	exit()

@@ -1,7 +1,7 @@
 #
 # One-dimensional netCDF sample file generator
-# Author:		Andrew Dunn
-# Last modified: 13 May 2014
+# Author:        Andrew Dunn
+# Last modified: 6 Oct 2014
 #
 # This file is part of Climate Analyser.
 #
@@ -122,7 +122,7 @@ def prepareOutput(output, dataset1D, dataset3D):
     longitudes.long_name = 'Longitude'
     longitudes[:] = og_lons[:]
 
-    values = output.createVariable('correlation', 'f8', ('lat', 'lon', ))
+    values = output.createVariable('convolute', 'f8', ('lat', 'lon', ))
     values.units = 'unitless'
 
     varA = (set(dataset1D.variables.keys())
@@ -130,7 +130,7 @@ def prepareOutput(output, dataset1D, dataset3D):
     varB = (set(dataset3D.variables.keys())
             - set(dataset3D.dimensions.keys())).pop()
 
-    values.long_name = ("Correlation between '" + getVarName(dataset1D, varA)
+    values.long_name = ("Convolution between '" + getVarName(dataset1D, varA)
                         + "' and '" + getVarName(dataset3D, varB) + "'")
     return values
 
@@ -181,11 +181,11 @@ def convolute(dataset1D, dataset3D, output):
 
 # Writes an error message to stderr.
 def error(message):
-    sys.stderr.write("Correlation error")
+    sys.stderr.write("Convolution error")
     sys.stderr.write(": ")
     sys.stderr.write(message)
     sys.stderr.write("\n")
-    raise Exception("Correlation error: " + message)
+    raise Exception("Convolution error: " + message)
 
 
 def run(inputFiles,outputFiles):
