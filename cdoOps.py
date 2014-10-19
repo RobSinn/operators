@@ -1,9 +1,11 @@
 #
 # Basic CDO operations
 # Author:		Robert Sinn
-# Last modified: xx xx 2014
+# Last modified: 18 10 2014
 #
-# This file is part of Climate Analyser.
+# This file is part of Climate Analyser. This script allows any cdo operator
+# to be chosen based on a provided string. Inputs and outputs must also be
+# provided
 #
 # Climate Analyser is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -24,6 +26,8 @@ import sys
 from cdo import *
 
 def checkOp(option,operation,inputFiles,outputFiles,incount,outcount):
+	#Deprecated function. Made avalible if you wish to include file count 
+	#checking for cdo operations.
 	if option == operation:
 		if len(inputFiles) != incount and incount != -1:
 			raise Exception("Insufficent input files")
@@ -38,13 +42,7 @@ def cdoCallString(files):
 
 def cdoOps(op,inputFiles,outputFiles):
     	cdo = Cdo()
-	if checkOp('regress',op,inputFiles,outputFiles,1,1):
-		func = cdo.regres
-	elif checkOpp('trend',op,inputFiles,outputFiles,1,2):
-		func = cdo.trend
-	else:
-		func = getattr(cdo, op) #Can't check validity but allows any cdo op
-
+	func = getattr(cdo, op) #Can't check validity but allows any cdo op
 	return func
 
 
